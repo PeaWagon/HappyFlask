@@ -1,12 +1,12 @@
 # Introduction
 
-This is a hackathon boilerplate for new Flask web applications created by [Major League Hacking](https://github.com/MLH). It is for hackers looking to get started quickly on a new hackathon project using the Flask microframework.
+HappyFlask is a hackathon project built for the purpose of learning about Flask and Python web development.
 
-- [Installation Guide](#installation-guide) - How to get started with a new Flask app
-- [User Guide](https://github.com/MLH/mlh-hackathon-flask-starter/blob/master/docs/USER_GUIDE.md) - How to develop apps created with this starter project
-- [Contributing Guide](https://github.com/MLH/mlh-hackathon-flask-starter/blob/master/docs/CONTRIBUTING.md) - How to contribute to the project
+## Installation Guide
 
-# <a name='installation-guide'>Installation Guide</a>
+These instructions aim to be more specific than those provide with the original boilerplate. These instructions were used for installing and setting up the website on Ubuntu 20.04.1 LTS.
+
+### Install the dependencies
 
 1. Fork and clone the repository or simply clone it from the MLH github page.
 
@@ -15,8 +15,8 @@ This is a hackathon boilerplate for new Flask web applications created by [Major
     cd mlh-hackathon-flask-starter
     ```
 
-2. Install [miniconda3] (https://docs.conda.io/en/latest/miniconda.html). Download and run the `.sh` installer as `sudo`.
-3. Create a Conda environment with Python 3.6. NOTE: Python 3.8 **will not build** with the given list of dependencies.
+2. Install [miniconda3](https://docs.conda.io/en/latest/miniconda.html). Download and run the `.sh` installer as `sudo`.
+3. Create and activate a Conda environment with Python 3.6. NOTE: Python 3.8 **will not build** with the given list of dependencies.
 
     ```bash
     conda create -n hackenv python=3.6
@@ -44,22 +44,14 @@ This is a hackathon boilerplate for new Flask web applications created by [Major
     sudo systemctl start postgresql.service
     ```
 
-## Getting Started
-
-**Create an app on GitHub**
-
-Head over to [GitHub OAuth apps](https://github.com/settings/developers) and create a new OAuth app. Name it what you like but you'll need to specify a callback URL, which should be something like: `http://localhost:5000/auth/callback/github`. 
-
-I used the access url as: `http://localhost:5000/`.
-
-The default port for Flask apps is `5000`, but you may need to update this if your setup uses a different port or if you're hosting your app somewhere besides your local machine.
-
-**Setup the Postgres database**
+### Setup the Postgres database
 
 ```bash
 sudo -i -u postgres
 psql
-create database happyflask;
+CREATE DATABASE happyflask;
+CREATE USER test;
+ALTER USER test WITH ENCRYPTED PASSWORD 'password-goes-here';
 \q
 exit
 ```
@@ -68,43 +60,52 @@ You need to be able to connect to a database either on your own computer (locall
 
 You will need to know the connection URL for your application which we will call `DATABASE_URL` in your environment variables. Here is an example:
 
-```
-postgresql://localhost:5432/mlh-hackathon-starter-flask
-```
-
-**Step 5: Update environment variables and run the Server.**
-
-Create a new file named `.env` by duplicating `.env.example`. Update the new file with the GitHub credentials. It should look similar to this:
-
-```
-# .env file
-DATABASE_URL="[INSERT_DATABASE_URL]"
-GITHUB_CLIENT_ID="[INSERT_CLIENT_ID]"
-GITHUB_CLIENT_SECRET="[INSERT_CLIENT_SECRET]"
+```bash
+postgresql://localhost:5432/happyflask
 ```
 
-You replace the GitHub credentials here and update the database URL. Learn more about the required [Environment Variables here](https://github.com/MLH/mlh-hackathon-flask-starter/blob/master/docs/USER_GUIDE.md#environment-variables).
+Note: to get the connection working, I needed to create a new user and add their authentication to my `.env` file. Here is the format that worked:
 
-Now we're ready to start our server which is as simple as:
-
-```
-(venv) $ flask run
+```bash
+postgresql://user:password@localhost:5432/database_name
 ```
 
-Open http://localhost:5000 to view it in your browser.
+### Create an OAuth App on GitHub
 
-The app will automatically reload if you make changes to the code.
-You will see the build errors and warnings in the console.
+Note: the default port for Flask apps is `5000`. Make sure to update the port when outside of localhost.
 
-# What's Included?
+1. Go to [GitHub OAuth apps](https://github.com/settings/developers) and create a new OAuth app.
+2. Choose a name for the app.
+3. Specify a Homepage URL (the access point for the app). I used the access URL: `http://localhost:5000/`.
+4. Specify a callback URL: `http://localhost:5000/auth/callback/github`.
+5. A Client ID should be visible for the OAuth App. Click the `Generate a new client secret` button to generate the respective client secret key and copy it to the clipboard. Leave the browser window open until the next steps are completed to avoid losing access to the secret key.
 
-- [Flask](http://flask.pocoo.org/) - A microframework for Python web applications
-- [Flask Blueprints](http://flask.pocoo.org/docs/1.0/blueprints/) - A Flask extension for making modular applications
-- [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.3/) - A Flask extension that adds ORM support for your data models.
-- [Werkzeug](http://werkzeug.pocoo.org/) - A Flask framework that implements WSGI for handling requests.
-- [Bootstrap 4](https://getbootstrap.com/) - An open source design system for HTML, CSS, and JS.
-- [Jinja2](http://jinja.pocoo.org/docs/2.10/) - A templating language for Python, used by Flask.
+### Update environment variables and run the server
 
-# License
+1. Make a copy of `.env.example` called `.env`.
+2. Update the `.env` file with the GitHub credentials:
+
+    ```bash
+    DATABASE_URL="[INSERT_DATABASE_URL]"
+    GITHUB_CLIENT_ID="[INSERT_CLIENT_ID]"
+    GITHUB_CLIENT_SECRET="[INSERT_CLIENT_SECRET]"
+    ```
+
+    You replace the GitHub credentials here and update the database URL. Learn more about the required [Environment Variables here](https://github.com/MLH/mlh-hackathon-flask-starter/blob/master/docs/USER_GUIDE.md#environment-variables).
+
+3. Start the development server:
+
+    ```bash
+    flask run
+    ```
+
+4. Open (http://localhost:5000)[] to view it in your browser. The app will automatically reload if you make changes to the code. You will see the build errors and warnings in the console.
+
+## Acknowledgements & License
+
+HappyFlask is a hackathon project built using the boilerplate for new Flask web applications created by [Major League Hacking](https://github.com/MLH).
 
 The Hackathon Starter Kit is open source software [licensed as MIT](https://github.com/MLH/mlh-hackathon-flask-starter/blob/master/LICENSE.md).
+
+- [User Guide](https://github.com/MLH/mlh-hackathon-flask-starter/blob/master/docs/USER_GUIDE.md) - How to develop apps created with this starter project
+- [Contributing Guide](https://github.com/MLH/mlh-hackathon-flask-starter/blob/master/docs/CONTRIBUTING.md) - How to contribute to the project
