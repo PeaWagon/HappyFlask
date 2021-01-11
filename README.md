@@ -8,49 +8,61 @@ This is a hackathon boilerplate for new Flask web applications created by [Major
 
 # <a name='installation-guide'>Installation Guide</a>
 
-This project requires the following tools:
+1. Fork and clone the repository or simply clone it from the MLH github page.
 
-- Python - The programming language used by Flask.
-- PostgreSQL - A relational database system.
-- Virtualenv - A tool for creating isolated Python environments.
+    ```bash
+    git clone https://github.com/MLH/mlh-hackathon-flask-starter.git
+    cd mlh-hackathon-flask-starter
+    ```
 
-To get started, install Python and Postgres on your local computer if you don't have them already. A simple way for Mac OS X users to install Postgres is using [Postgres.app](https://postgresapp.com/). You can optionally use another database system instead of Postgres, like [SQLite](http://flask.pocoo.org/docs/1.0/patterns/sqlite3/).
+2. Install [miniconda3] (https://docs.conda.io/en/latest/miniconda.html). Download and run the `.sh` installer as `sudo`.
+3. Create a Conda environment with Python 3.6. NOTE: Python 3.8 **will not build** with the given list of dependencies.
+
+    ```bash
+    conda create -n hackenv python=3.6
+    conda activate hackenv
+    ```
+
+4. Install the Python dependencies, located in `requirements.txt`. Make sure the correct `pip` is being used to install the dependencies.
+
+    ```bash
+    which pip            
+    ~/.conda/envs/hackenv/bin/pip
+    pip install -r requirements.txt
+    ```
+
+5. Install PostgreSQL.
+
+    ```bash
+    sudo apt install postgresql
+    ```
+
+6. Check that the Postgres service has started, otherwise start it up.
+
+    ```bash
+    systemctl status postgresql.service
+    sudo systemctl start postgresql.service
+    ```
 
 ## Getting Started
 
-**Step 1. Clone the code into a fresh folder**
+**Create an app on GitHub**
 
-```
-$ git clone https://github.com/MLH/mlh-hackathon-flask-starter.git
-$ cd mlh-hackathon-flask-starter
-```
+Head over to [GitHub OAuth apps](https://github.com/settings/developers) and create a new OAuth app. Name it what you like but you'll need to specify a callback URL, which should be something like: `http://localhost:5000/auth/callback/github`. 
 
-**Step 2. Create a Virtual Environment and install Dependencies.**
-
-Create a new Virtual Environment for the project and activate it. If you don't have the `virtualenv` command yet, you can find installation [instructions here](https://virtualenv.readthedocs.io/en/latest/). Learn more about [Virtual Environments](http://flask.pocoo.org/docs/1.0/installation/#virtual-environments).
-
-```
-$ virtualenv venv
-$ source venv/bin/activate
-```
-
-Next, we need to install the project dependencies, which are listed in `requirements.txt`.
-
-```
-(venv) $ pip install -r requirements.txt
-```
-
-**Step 3: Create an app on GitHub**
-
-Head over to [GitHub OAuth apps](https://github.com/settings/developers) and create a new OAuth app. Name it what you like but you'll need to specify a callback URL, which should be something like:
-
-```
-http://localhost:5000/auth/callback/github
-```
+I used the access url as: `http://localhost:5000/`.
 
 The default port for Flask apps is `5000`, but you may need to update this if your setup uses a different port or if you're hosting your app somewhere besides your local machine.
 
-**Step 4: Setup your database**
+**Setup the Postgres database**
+
+```bash
+sudo -i -u postgres
+psql
+create database happyflask;
+\q
+exit
+```
 
 You need to be able to connect to a database either on your own computer (locally) or through a hosted database. You can [install Postgres locally](http://www.postgresqltutorial.com/install-postgresql/) and [connect to it](http://www.postgresqltutorial.com/connect-to-postgresql-database/) to provide the database for your app.
 
@@ -92,10 +104,6 @@ You will see the build errors and warnings in the console.
 - [Werkzeug](http://werkzeug.pocoo.org/) - A Flask framework that implements WSGI for handling requests.
 - [Bootstrap 4](https://getbootstrap.com/) - An open source design system for HTML, CSS, and JS.
 - [Jinja2](http://jinja.pocoo.org/docs/2.10/) - A templating language for Python, used by Flask.
-
-# Code of Conduct
-
-We enforce a Code of Conduct for all maintainers and contributors of this Guide. Read more in [CONDUCT.md](https://github.com/MLH/mlh-hackathon-flask-starter/blob/master/docs/CONDUCT.md).
 
 # License
 
