@@ -19,7 +19,17 @@ class User(db.Model):
         data = GitHub.get_user_from_token(access_token)
 
         """Find existing user or create new User instance"""
-        instance = User.query.filter_by(username=data['login']).first()
+        try:
+            instance = User.query.filter_by(username=data['login']).first()
+        except KeyError:
+            # {
+            # 'message': 'Must specify access token via Authorization header',
+            # 'documentation_url': 'https://docs.github.com/v3/#oauth2-token-sent-in-a-header'
+            # }
+            # note that the method used in this boilerplate doesn't work
+            # and needs updating
+            print(data)
+            raise KeyError("Please fix me")
 
         if not instance:
             instance = User(data['login'], data['avatar_url'], data['id'])
